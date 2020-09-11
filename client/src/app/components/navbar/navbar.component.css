@@ -5,3 +5,11 @@
 .fas {
   margin: 3px;
 }
+
+.badge {
+  position: relative;
+  top: -10px;
+  right: 5px;
+  background-color: var(--color-warning);
+  border-radius: 50%;
+}

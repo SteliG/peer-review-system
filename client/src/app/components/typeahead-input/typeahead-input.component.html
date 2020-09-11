@@ -1,0 +1,22 @@
+<ng-template #rt let-r="result" let-t="term">
+  <div *ngIf="r.username">
+    <img [src]="r.avatarURL " class="mr-1" style="width: 16px" />
+    <ngb-highlight [result]="r.username" [term]="t"></ngb-highlight>
+  </div>
+  <div *ngIf="r.teamName">
+    <i class="fas fa-users" style="margin-right: 5px"></i>
+    <ngb-highlight [result]="r.teamName" [term]="t"></ngb-highlight>
+  </div>
+</ng-template>
+<label [for]="inputId">{{ label }}</label>
+<input
+  [id]="inputId"
+  name="username-search"
+  type="text"
+  [formControl]="fc"
+  class="form-control"
+  [ngbTypeahead]="searchFunc"
+  [inputFormatter]="formatter"
+  [resultFormatter]="formatter"
+  [resultTemplate]="rt"
+/>

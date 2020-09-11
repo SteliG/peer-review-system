@@ -1,22 +1,31 @@
-
 <h3 class="text-center">Log In</h3>
-<div class="d-flex justify-content-center align-items-center container ">  
-<form [formGroup]="loginForm" (ngSubmit)="logInUser()" class="login-form">
+<div class="d-flex justify-content-center align-items-center container">
+  <form [formGroup]="loginForm" (ngSubmit)="logInUser()" class="login-form">
     <div class="form-group">
       <label for="formGroupEmail">Email</label>
-      <input type="text" formControlName="email" class="form-control" id="formGroupEmail" placeholder="Email...">
+      <input type="text" formControlName="email" class="form-control" id="formGroupEmail" placeholder="Email..." />
     </div>
-    <div *ngIf="this.loginForm.controls.email.invalid && this.isSubmitted===true" class="invalid-input">
-        Email is required!
-      </div>
+    <div *ngIf="this.loginForm.controls.email.invalid && this.isSubmitted" class="invalid-input">
+      Email is required!
+    </div>
     <div class="form-group">
       <label for="formGroupPassword">Password</label>
-      <input type="text" formControlName="password" type="password" class="form-control" id="formGroupPassword" placeholder="Password...">
+      <input
+        type="text"
+        formControlName="password"
+        type="password"
+        class="form-control"
+        id="formGroupPassword"
+        placeholder="Password..."
+      />
     </div>
-    <div *ngIf="this.loginForm.controls.password.invalid && this.isSubmitted===true" class="invalid-input">
+    <div *ngIf="this.loginForm.controls.password.invalid && this.isSubmitted" class="invalid-input">
       Password is required!
     </div>
     <div class="form-group">
       <button type="submit" name="submit" class="float-right btn">Log In</button>
-  </div>
-  <form>
+    </div>
+  </form>
+</div>
+
+

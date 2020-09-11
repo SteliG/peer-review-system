@@ -1,20 +1,20 @@
 <div class="container">
   <div class="row">
-    <div class="col-9 display-item">
+    <div class="col-md-9 col-sm-12 display-item">
       <div class="row">
-        <div class=" col-9 title">
-          {{ this.workItem.title }}
+        <div class="col-9 title-section">
+          <div class="title">{{ this.workItem.title }}</div>
+          <div class="status-field">
+            {{ workItem.workItemStatus.status }}
+          </div>
         </div>
-        <div class=" col-3 work-item-status">
+        <div class="col-3 work-item-status">
           <a
-            class="btn btn-success float-center"
+            class="btn btn-warning float-right"
             *ngIf="checkEditingRights()"
             [routerLink]="['/pullRequests/edit', workItem.id]"
             >Edit</a
           >
-          <button type="button" class="btn btn-info float-right disabled">
-            {{ workItem.workItemStatus.status }}
-          </button>
         </div>
       </div>
       <hr />
@@ -30,69 +30,69 @@
             <tbody class="upload-name-style">
               <tr *ngFor="let item of this.workItem.files">
                 <td>
-                  <a [href]="item.url"
-                    ><strong>{{ item.fileName }}</strong></a
-                  >
+                  <a [href]="item.url"><strong>{{ item.fileName }}</strong></a>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col-12">
-          <div class="comments-label" *ngIf="workItem.comments.length > 0">
-            Comments:
+    </div>
+    <div class="col-md-3 col-sm-12 display-review-details">
+      <div class="author-and-team col-sm-12">
+        <div class="row">
+          <div class="col-6 col-sm-6 col-md-12 review-details-border">
+            <div class="assignee">Author</div>
+            <div class="assignee-name">{{ workItem.author.username }}</div>
           </div>
-          <display-comment [comments]="workItem.comments"></display-comment>
+          <hr />
+          <br />
+          <div class="col-6 col-sm-6 col-md-12 review-details-border">
+            <div class="team">Team</div>
+            <div class="team-name">
+              {{ workItem.team.teamName }}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <item-comment
-            [isReviewer]="isReviewer"
-            (commentEmiter)="onCommentSubmition($event)"
-          >
-          </item-comment>
+      <div class="col-sm-12 review-details-border">
+        <div class="col-12 reviewers">Reviewers</div>
+        <div class="col-12 row" *ngFor="let review of workItem.reviews">
+          <div class="col reviewer-name">
+            {{ review.username }}
+          </div>
+          <div class="col">
+            <i class="fas fa-check-circle" *ngIf="review.status === 'accepted'"></i>
+            <i class="fas fa-times-circle" *ngIf="review.status === 'rejected'"></i>
+            <i class="fas fa-exclamation-circle" *ngIf="review.status === 'request_changes'"></i>
+            <i class="fas fa-circle" *ngIf="review.status === 'pending'"></i>
+          </div>
+        </div>
+      </div>
+      <div class=" col-12 review-details-border">
+        <div class="tags">Tags</div>
+        <div class="tag-name" *ngFor="let tag of workItem.tags">
+          {{ tag.name }}
         </div>
       </div>
     </div>
-    <div class="col-3 display-review-details">
-      <div class="assignee">Author</div>
-      <div class="assignee-name">{{ workItem.author.username }}</div>
-      <hr />
-      <div class="reviewers">Reviewers</div>
-      <div class="row" *ngFor="let review of workItem.reviews">
-        <div class="col reviewer-name">
-          {{ review.username }}
-        </div>
-        <div class="col">
-          <i
-            class="fas fa-check-circle"
-            *ngIf="review.status === 'accepted'"
-          ></i>
-          <i
-            class="fas fa-times-circle"
-            *ngIf="review.status === 'rejected'"
-          ></i>
-          <i
-            class="fas fa-exclamation-circle"
-            *ngIf="review.status === 'request_changes'"
-          ></i>
-          <i class="fas fa-circle" *ngIf="review.status === 'pending'"></i>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="comments-label" *ngIf="workItem.comments.length > 0">
+        Comments:
       </div>
-      <hr />
-      <div class="tags">Tags</div>
-      <div class="tag-name" *ngFor="let tag of workItem.tags">
-        {{ tag.name }}
-      </div>
-      <hr />
-      <div class="team">Team</div>
-      <div class="team-name">
-        {{ workItem.team.teamName }}
-      </div>
+      <display-comment [comments]="workItem.comments"></display-comment>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <item-comment
+        *ngIf="isReviewer || isAssignee && checkEditingRights()"
+        [isReviewer]="isReviewer"
+        (commentEmiter)="onCommentSubmition($event)"
+      >
+      </item-comment>
     </div>
   </div>
 </div>

@@ -1,21 +1,16 @@
-import { Component, OnInit } from "@angular/core";
-import { WorkItem } from "src/app/models/work-item";
-import { NotificatorConfigService } from 'src/app/core/services/notificator-config.service';
+import { Component, OnInit } from '@angular/core';
+import { WorkItem } from 'src/app/models/work-item';
 
 @Component({
-  selector: "app-search-workitems",
-  templateUrl: "./search-workitems.component.html",
-  styleUrls: ["./search-workitems.component.css"]
+  selector: 'app-search-workitems',
+  templateUrl: './search-workitems.component.html',
+  styleUrls: ['./search-workitems.component.css']
 })
 export class SearchWorkitemsComponent implements OnInit {
   public workItems: WorkItem[] = [];
-  constructor(
-    private readonly notificatorConfigService: NotificatorConfigService,
-  ) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.notificatorConfigService.configEngagespotNotificator();
-  }
+  ngOnInit() {}
 
   updateTable(data: any) {
     this.workItems = data;

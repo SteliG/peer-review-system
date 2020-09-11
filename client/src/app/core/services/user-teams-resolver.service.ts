@@ -19,9 +19,9 @@ import { UserDetails } from 'src/app/models/user-details';
       
     ) {
         this.loggedUser = this.authenticationService.currentUserValue.user;
+        console.log(this.loggedUser);
     }
     public resolve(): Observable<any> | Promise<any> | any {
-        console.log(this.loggedUser);
         
       return this.teamService
         .getTeamsByUserId(this.loggedUser.id)

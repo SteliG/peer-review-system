@@ -2,7 +2,7 @@
   <h4>Create New Work Item</h4>
   <form [formGroup]="createWorkItemForm" (ngSubmit)="createWorkItem()">
     <div class="row">
-      <div class="col-8">
+      <div class="col-12 col-sm-8">
         <div class="form-group">
           <input
             formControlName="title"
@@ -14,105 +14,66 @@
             placeholder="Work item title"
           />
         </div>
-        <div
-          *ngIf="
-            this.createWorkItemForm.controls.title.invalid &&
-            this.isSubmitted === true
-          "
-          class="invalid-input"
-        >
-          Title is required!
+        <div class="invalid-input invalid-input-top">
+          <span
+            *ngIf="
+              this.createWorkItemForm.controls.title.invalid
+              && this.isSubmitted"
+          >
+            Title is required!
+          </span>
         </div>
         <div class="form-group">
-          <!-- <div
-            [froalaEditor]="options"
-            [(froalaModel)]="editorContent"
-            class="froala"
-          ></div> -->
-          <textarea
-            [froalaEditor]="options"
-            formControlName="editorModel"
-            class="froala"
-          ></textarea>
-          <div
-            *ngIf="
-              this.createWorkItemForm.controls.editorModel.invalid &&
-              this.isSubmitted === true
-            "
-            class="invalid-input"
-          >
-            Description is required (at least 10 characters)!
+          <textarea [froalaEditor]="options" formControlName="editorModel" class="froala"></textarea>
+          <div class="invalid-input">
+            <span
+              *ngIf="
+                this.createWorkItemForm.controls.editorModel.invalid
+                && this.isSubmitted"
+              class="invalid-input"
+            >
+              Description is required (at least 10 characters)!
+            </span>
           </div>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-12 col-sm-4">
         <div class="form-group">
-          <div
-            class="btn-group  w-100"
-            ngbDropdown
-            role="group"
-            aria-label="Button group with nested dropdown"
-          >
-            <button
-              type="button"
-              #ref
-              class="btn btn-outline-primary"
-              ngbDropdownToggle
-            >
+          <div class="btn-group  w-100" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+            <button type="button" #ref class="btn btn-outline-primary" ngbDropdownToggle>
               {{ this.chosenTeam.teamName }}
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-              <button
-                type="button"
-                *ngFor="let team of this.userTeams"
-                ngbDropdownItem
-                (click)="changeTeam(team, ref)"
-              >
+              <button type="button" *ngFor="let team of this.userTeams" ngbDropdownItem (click)="changeTeam(team, ref)">
                 {{ team.teamName }}
               </button>
             </div>
           </div>
-          <div
-            *ngIf="this.isSubmitted === true && !this.chosenTeam.rules"
-            class="invalid-input"
-          >
-            Team is required!
+          <div class="invalid-input invalid-input-bottom">
+            <span *ngIf="this.isSubmitted === true && !this.chosenTeam.rules" class="invalid-input-bottom">
+              Team is required!
+            </span>
           </div>
         </div>
         <div class="form-group">
-          <ng-template #rt let-r="result" let-t="term">
-            <img [src]="r.avatarURL" class="mr-1" style="width: 16px" />
-            <ngb-highlight [result]="r.username" [term]="t"></ngb-highlight>
-          </ng-template>
-
-          <label for="typeahead-template">Search for asignees:</label>
-          <input
-            id="typeahead-template"
-            formControlName="reviwer"
-            type="text"
-            class="form-control"
-            name="username-search"
-            [(ngModel)]="model"
-            [ngbTypeahead]="search"
-            [resultTemplate]="rt"
-            [inputFormatter]="formatter"
-          />
-          <div
-            *ngIf="
-              this.isSubmitted === true &&
-              this.chosenTeam.rules &&
-              this.notEnoughRequevwerAdded()
-            "
-            class="invalid-input"
-          >
-            You need at least
-            {{ this.chosenTeam.rules.minNumberOfReviewers }} asignees!
+          <app-typeahead-input
+            [fc]="createWorkItemForm.get('reviewer')"
+            label="Search for reviewers:"
+            [searchFunc]="search"
+            [formatter]="formatter"
+          ></app-typeahead-input>
+          <div class="invalid-input">
+            <span
+              *ngIf="
+                this.isSubmitted === true
+                && this.chosenTeam.rules
+                && this.notEnoughReviewersAdded()"
+              class="invalid-input"
+            >
+              You need at least {{ this.chosenTeam.rules.minNumberOfReviewers }} reviewers!
+            </span>
           </div>
-          <button
-            type="button"
-            class="btn btn-success add-button"
-            (click)="addUsername()"
-          >
+          <button type="button" class="btn btn-success add-button" (click)="addUsername()">
             Add
           </button>
 
@@ -131,8 +92,6 @@
             [data]="tags"
             [(ngModel)]="selectedItems"
             [settings]="dropdownSettings"
-            (onSelect)="onItemSelect($event)"
-            (onSelectAll)="onSelectAll($event)"
           >
           </ng-multiselect-dropdown>
         </div>
@@ -140,7 +99,7 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-success" type="submit" name="submit">
+      <button class="btn btn-success create-button" type="submit" name="submit">
         Create Work Item
       </button>
     </div>
@@ -159,11 +118,7 @@
             <strong>{{ item.relativePath }}</strong>
           </td>
           <td>
-            <button
-              class="btn btn-danger"
-              (click)="removeFile(item)"
-              type="button"
-            >
+            <button class="btn btn-danger" (click)="removeFile(item)" type="button">
               Remove file
             </button>
           </td>

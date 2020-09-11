@@ -1,0 +1,5 @@
+{
+  "singleQuote": true,
+  "editor.formatOnSave": true,
+  "max-line-length": [true, 120]
+}

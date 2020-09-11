@@ -1,18 +1,15 @@
 .comment-form {
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--color-repohead-border);
   border-radius: 4px;
 }
 
 .text-comment {
-  margin: 10px;
-  margin-top: 20px;
-  line-height: 1.6;
+  display: block;
+  width: 90%;
   max-width: 90%;
   min-height: 100px;
-  width: 90%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.6;
+  margin: 20px 10px 10px 10px;
   border-radius: 4px;
 }
 

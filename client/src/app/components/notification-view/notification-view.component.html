@@ -1,0 +1,12 @@
+<div class="wrapper">
+  <div class="notifications-title">Notifications</div>
+  <ng-container *ngFor="let notification of notificationsArray">
+    <div class="notification">
+      <div class="row">
+        <div class="col-2 col-sm-2"><i class="fas fa-bell"></i></div>
+        <div class="col-10 col-sm-10">{{ notification.title }}</div>
+      </div>
+      <div class="row notification-content">{{ notification.text }}</div>
+    </div>
+  </ng-container>
+</div>

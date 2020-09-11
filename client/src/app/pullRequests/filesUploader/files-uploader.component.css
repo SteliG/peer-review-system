@@ -1,3 +1,18 @@
-.browse {
+.browse-button {
   margin-left: 10px;
+  color: white;
+  background-color: var(--color-button-browse);
+  border-color: var(--color-button-browse);
+}
+
+.files-upload-text-and-actions {
+  display: flex;
+  margin: 0 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.upload-text {
+  margin: auto;
 }

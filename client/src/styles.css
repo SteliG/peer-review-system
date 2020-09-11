@@ -1,10 +1,46 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~@fortawesome/fontawesome-free/css/all.css";
+:root {
+  --color-primary: #b094aa;
+  --color-secondary: #007bff;
+  --color-button-browse: #218838;
+  --color-requests-nav-bg: #ffffff;
+  --color-requests-nav-item-selected: #24292e;
+  --color-nav-item: #586069;
+  --color-repohead-bg: #fafbfc;
+  --color-repohead-border: #e1e4e8;
+  --color-warning: #bd0410;
+  --color-success: #28a745;
+  --color-edit: #ffff00;
+  --color-workitem-status: #253858;
+  --color-workitem-status-background: #dfe1e6;
+  --color-border: #dee2e6;
+  --color-box-shadow: #ebebeb;
+}
 
 .invalid-input {
-  color: #bd0410;
+  display: flex;
+  height: 40px;
+  align-items: center;
+  color: var(--color-warning);
 }
 
 .valid-input {
-  color: #28a745;
+  color: var(--color-success);
+}
+
+.fr-wrapper {
+  min-height: 120px;
+}
+
+app-typeahead-input ngb-typeahead-window {
+  width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.margin-top {
+  margin-top: 10px;
 }

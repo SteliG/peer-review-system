@@ -1,39 +1,44 @@
 <div class="container">
   <div class="row">
-    <div class="col-4 user-info">
-      <img class="avatar" [src]="currentUser.user.avatarURL" />
-      <div class="user-info">{{ currentUser.user.username }}</div>
-      <div class="user-info">
-        <span>{{ currentUser.user.firstName }}</span>
-        &nbsp;
-        <span>{{ currentUser.user.lastName }}</span>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-4 user-info">
+      <div class="card">
+        <div class="avatar-background">
+          <img class="avatar" [src]="currentUser.user.avatarURL" alt="profile avatar" />
+        </div>
+        <div class="card-body">
+          <div>{{ currentUser.user.firstName }} {{ currentUser.user.lastName }}</div>
+          <div>{{ currentUser.user.email }}</div>
+        </div>
       </div>
-      <div>{{ currentUser.user.email }}</div>
     </div>
-    <div class="col-8">
-      <ngb-tabset #t="ngbTabset">
-        <ngb-tab title="Team Invitations">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-8 tabset">
+      <ngb-tabset #t="ngbTabset" [activeId]="selectedTabId">
+        <ngb-tab id="invitations">
+          <ng-template ngbTabTitle>
+            <a [routerLink]="['/profile/invitations']" title="team-invitation">Team Invitations</a>
+          </ng-template>
           <ng-template ngbTabContent>
+            <div *ngIf="activeInvitations.length===0" class="invalid-input margin-top">
+              You do not have any team invitations!
+            </div>
             <div class="row" *ngFor="let invitation of activeInvitations">
-              <div class="col-sm" class="resource-name">
-                <div class="resource-name">
-                  {{ invitation.name }}
-                </div>
+              <div class="resource-name col-12 col-md-4">
+                {{ invitation.name }}
               </div>
-              <div class="col-sm">
+              <div class="col-12 col-md-4">
                 <button
                   type="button"
-                  class="btn btn-outline-success"
+                  class="btn btn-outline-success resource-button"
                   (click)="acceptInvitation(invitation)"
                 >
                   Accept
                   <i class="fas fa-check"></i>
                 </button>
               </div>
-              <div class="col-sm">
+              <div class="col-12 col-md-4">
                 <button
                   type="button"
-                  class="btn btn-outline-danger"
+                  class="btn btn-outline-danger resource-button"
                   (click)="rejectInvitation(invitation)"
                 >
                   Reject
@@ -46,30 +51,26 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab id="tab-selectbyid2" title="Teams">
+        <ngb-tab id="teams">
+          <ng-template ngbTabTitle>
+            <a [routerLink]="['/profile/teams']" title="team">Teams</a>
+          </ng-template>
           <ng-template ngbTabContent>
+            <div *ngIf="userTeams?.length === 0" class="invalid-input margin-top">
+              You still do not have any teams! You can create one!
+            </div>
             <div *ngFor="let team of userTeams; let i = index">
               <div class="row">
-                <div class="col-sm resource-name">
+                <div class="col-12 col-md-4 resource-name">
                   {{ team.teamName }}
                 </div>
-                <div class="col-sm">
-                  <button
-                    type="button"
-                    class="btn btn-outline-success"
-                    (click)="toggleInvitation(i)"
-                  >
+                <div class="col-12 col-md-4 resource-button">
+                  <button type="button" class="btn btn-outline-success" (click)="toggleInvitation(i)">
                     Invite Members
                   </button>
                 </div>
-                <div class="col-sm">
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    (click)="leaveTeam(team)"
-                  >
-                    Leave
-                  </button>
+                <div class="col-12 col-md-4 resource-button">
+                  <button type="button" class="btn btn-outline-danger" (click)="open(content,team)">Leave</button>
                 </div>
               </div>
               <form
@@ -79,15 +80,13 @@
                 class="Invitation"
               >
                 <div>
-                  <label for="typeahead-format">Search for a name:</label>
-                  <input
-                    id="typeahead-format"
-                    formControlName="member"
-                    type="text"
-                    class="form-control"
-                    [ngbTypeahead]="search"
-                    [resultFormatter]="formatter"
-                  />
+                  <app-typeahead-input
+                    inputId="memberName"
+                    [fc]="addTeamMembersFormArray[i].get('member')"
+                    label="Search for а name:"
+                    [searchFunc]="search"
+                    [formatter]="formatter"
+                  ></app-typeahead-input>
                   <hr />
                   <button
                     type="button"
@@ -98,13 +97,13 @@
                   >
                     Send Invite
                   </button>
-                  <div *ngIf="this.successfulInvitation" class="valid-input">
+                  <div *ngIf="this.successfulInvitation && this.sendInvite" class="valid-input">
                     You have successfully invited this user!
                   </div>
-                  <div *ngIf="this.invalidInput" class="invalid-input">
+                  <div *ngIf="this.invalidInput && this.sendInvite" class="invalid-input">
                     Something went wrong! Try again!
                   </div>
-                  <div *ngIf="this.errorMessage" class="invalid-input">
+                  <div *ngIf="this.errorMessage && this.sendInvite" class="invalid-input">
                     {{ errorMessage }}
                   </div>
                 </div>
@@ -112,13 +111,12 @@
             </div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab title="Make New Team">
+        <ngb-tab id="create">
+          <ng-template ngbTabTitle>
+            <a [routerLink]="['/profile/create']" title="create-team">Make New Team</a>
+          </ng-template>
           <ng-template ngbTabContent>
-            <form
-              [formGroup]="createTeamForm"
-              (ngSubmit)="createTeam()"
-              class="createTeamForm"
-            >
+            <form [formGroup]="createTeamForm" (ngSubmit)="createTeam()" class="createTeamForm">
               <div class="form-group">
                 <label for="formGroupName">Name</label>
                 <input
@@ -144,36 +142,34 @@
                   <input
                     [formControl]="myCheckbox"
                     type="checkbox"
-                    (change)="setRulesToDefault()"
+                    (change)="isChecked? setRulesToDefault():cleanDefaultRules()"
                     class="form-check-input"
-                    id="exampleCheck1"
+                    id="check-default-rule"
                   />
-                  <label class="form-check-label" for="exampleCheck1"
-                    >Default rule</label
-                  >
+                  <label class="form-check-label" for="check-default-rule">Default rule</label>
                 </div>
+                <label for="rule-approval-rate" class="sub-rule">Minimum Approval Rate</label>
                 <input
                   type="number"
                   formControlName="minPercentApprovalOfItem"
                   class="form-control"
-                  id="formGroupPercent"
+                  id="rule-approval-rate"
                   placeholder="Minimum Approval Rate..."
                 />
+                <label for="rule-reviewers" class="sub-rule">Minimal Number Of Reviewers</label>
                 <input
                   type="number"
                   formControlName="minNumberOfReviewers"
                   class="form-control"
-                  id="formGroupReviewers"
+                  id="rule-reviewers"
                   placeholder="Minimal number of reviewers..."
                 />
                 <div
-                  *ngIf="
-                    this.createTeamForm.controls.rule.invalid &&
-                    this.isSubmitted === true
-                  "
+                  *ngIf="this.createTeamForm.controls.rule.invalid && this.isSubmitted === true"
                   class="invalid-input"
                 >
-                  Rules are required!
+                  You need to set between 50% and 100% approval rate! The minimal number of reviewers must be at least
+                  two!
                 </div>
                 <div *ngIf="this.invalidInput" class="invalid-input">
                   Something went wrong! Try again!
@@ -189,3 +185,19 @@
     </div>
   </div>
 </div>
+
+<ng-template #content let-modal>
+  <div class=" modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete Post</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Do you really want to leave this team?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Leave</button>
+  </div>
+</ng-template>

@@ -1,52 +1,41 @@
 <div class="container">
-  <form [formGroup]="searchForm">
+  <form class="form-group" [formGroup]="searchForm">
     <div class="row">
       <div class="col-lg col-xs-6 col-md-4 mb-20">
-        <label for="typeahead-format">Author:</label>
-        <input
-          formControlName="author"
-          type="text"
-          class="form-control"
-          [ngbTypeahead]="search"
-          [resultFormatter]="formatter"
-        />
+        <app-typeahead-input
+          inputId="authorName"
+          [fc]="searchForm.get('author')"
+          label="Author:"
+          [searchFunc]="search"
+          [formatter]="formatter"
+        ></app-typeahead-input>
       </div>
       <div class="col-lg col-xs-6 col-md-4 mb-20">
-        <label for="typeahead2">Asignee:</label>
-        <input
-          formControlName="asignee"
-          type="text"
-          class="form-control"
-          [ngbTypeahead]="search"
-          [resultFormatter]="formatter"
-        />
+        <app-typeahead-input
+          inputId="reviewerName"
+          [fc]="searchForm.get('asignee')"
+          label="Reviewer:"
+          [searchFunc]="search"
+          [formatter]="formatter"
+        ></app-typeahead-input>
       </div>
       <div class="col-lg col-xs-6 col-md-4 mb-20">
-        <label for="typeahead3">Team:</label>
-        <input
-          formControlName="team"
-          type="text"
-          class="form-control"
-          [ngbTypeahead]="teamSearch"
-          [resultFormatter]="formatterTeam"
-        />
+        <app-typeahead-input
+          inputId="teamName"
+          [fc]="searchForm.get('team')"
+          label="Team:"
+          [searchFunc]="teamSearch"
+          [formatter]="formatterTeam"
+        ></app-typeahead-input>
       </div>
       <div class="col-lg col-xs-6 col-md-4 mb-20">
         <label class="block">Tags:</label>
         <div ngbDropdown class="d-inline-block w-100">
-          <button
-            class="btn btn-outline-primary w-100"
-            id="dropdownBasic1"
-            ngbDropdownToggle
-          >
+          <button class="btn btn-outline-primary w-100" id="dropdownBasic1" ngbDropdownToggle>
             {{ chosenTag }}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button
-              *ngFor="let tag of tags"
-              ngbDropdownItem
-              (click)="changeTag(tag.name)"
-            >
+            <button *ngFor="let tag of tags" ngbDropdownItem (click)="changeTag(tag.name)">
               {{ tag.name }}
             </button>
             <button ngbDropdownItem (click)="changeTag('')">any</button>
@@ -56,11 +45,7 @@
       <div class="col-lg col-xs-6 col-md-4 mb-20">
         <div ngbDropdown class="d-inline-block w-100">
           <label class="block" for="typeahead">Status:</label>
-          <button
-            class="btn btn-outline-primary w-100"
-            id="dropdownBasic1"
-            ngbDropdownToggle
-          >
+          <button class="btn btn-outline-primary w-100" id="dropdownBasic1" ngbDropdownToggle>
             {{ chosenStatus }}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -84,13 +69,7 @@
     <div class="row">
       <div class="col-lg-8 col-md-12">
         <label class="block">Title:</label>
-        <input
-          class="title-input"
-          class="form-control"
-          formControlName="title"
-          style="width:100%;"
-          type="text"
-        />
+        <input class="title-input" class="form-control" formControlName="title" type="text" />
       </div>
       <div class="col-lg-4">
         <button class="btn search-button" (click)="searchForWorkitems()">

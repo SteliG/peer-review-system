@@ -1,17 +1,16 @@
-.register-form{
-    box-align: center;
-    width:  50%
-    
+.register-form {
+  box-align: center;
+  width: 50%;
 }
 
 .btn {
-    background-color: #b094aa;
+  background-color: #b094aa;
 }
 
 .h3 {
-    padding: 15px;
+  padding: 15px;
 }
 
-.invalid-input{
-    color:#bd0410;
+.invalid-input {
+  color: #bd0410;
 }

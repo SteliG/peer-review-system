@@ -1,0 +1,51 @@
+.wrapper {
+  position: absolute;
+  right: 70px;
+  width: 300px;
+  min-height: 150px;
+  background-color: var(--color-repohead-bg);
+  box-shadow: 2px 2px 2px var(--color-box-shadow);
+  z-index: 5;
+}
+
+.notification-content {
+  margin: 5px 5px;
+  padding: 0 5px 5px 5px;
+  width: 100%;
+  font-size: 12px;
+}
+
+.row {
+  padding: 5px 10px;
+}
+
+.notifications-title {
+  padding-top: 5px;
+  min-height: 35px;
+  text-align: center;
+  background-color: var(--color-secondary);
+}
+
+.fa-bell {
+  color: var(--color-primary);
+}
+
+.wrapper::after {
+  content: ' ';
+  position: absolute;
+  bottom: 100%;
+  right: 13%;
+  margin-left: -5px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: transparent transparent var(--color-secondary) transparent;
+}
+
+.notification {
+  min-height: 90px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification:last-child {
+  border-bottom: none;
+}

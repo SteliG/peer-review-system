@@ -25,3 +25,7 @@
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
 }
+
+.dropdown-menu {
+  width: 100%;
+}

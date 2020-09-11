@@ -1,37 +1,31 @@
-/* .author{
-    display: inline;
-} */
-/* .display-item {
-  background-color: plum;
-}
-
-.display-review-details {
-  background-color: purple;
-} */
-
 .container {
   margin-top: 40px;
 }
 
 .title {
-  font-size: 34px;
+  display: flex;
+  font-size: 28px;
+}
+
+.title-section {
+  display: flex;
 }
 
 .fa-circle {
-  color: grey;
   padding: 2px;
+  color: var(--color-repohead-border);
 }
 
 .fa-check-circle {
-  color: green;
+  color: var(--color-success);
 }
 
 .fa-exclamation-circle {
-  color: yellow;
+  color: var(--color-edit);
 }
 
 .fa-times-circle {
-  color: red;
+  color: var(--color-warning);
 }
 
 .assignee,
@@ -40,14 +34,62 @@
 .team,
 .title,
 .comments-label {
+  margin-top: 15px;
   font-weight: bold;
 }
 
 .content {
-  min-height: 250px;
   margin-bottom: 20px;
+  min-height: 250px;
 }
 
 .upload-table {
   margin-top: 10px;
+}
+
+.status-field {
+  display: inline-block;
+  line-height: 125%;
+  margin-left: 25px;
+  padding: 2px 5px;
+  max-height: 30px;
+  color: var(--color-workitem-status);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: var(--color-workitem-status-background);
+  border: 1px solid var(--color-workitem-status-background);
+  border-radius: 3px;
+}
+
+.btn-warning {
+  min-width: 75px;
+}
+
+@media (max-width: 600px) {
+  .title-section {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .status-field {
+    flex: 30%;
+    margin-left: 0px;
+  }
+}
+
+.review-details-border {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-repohead-border);
+}
+
+.reviewers,
+.reviewer-name {
+  padding-left: 0px;
+}
+
+.assignee {
+  margin-top: 0px;
 }

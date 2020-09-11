@@ -1,0 +1,7 @@
+:host() ngb-typeahead-window {
+  width: 100%;
+}
+:host() {
+  position: relative;
+  display: block;
+}

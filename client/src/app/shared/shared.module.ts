@@ -1,11 +1,12 @@
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { HttpClientModule } from "@angular/common/http";
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TypeaheadInputComponent } from '../components/typeahead-input/typeahead-input.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [TypeaheadInputComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -18,7 +19,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    TypeaheadInputComponent
   ]
 })
 export class SharedModule {}

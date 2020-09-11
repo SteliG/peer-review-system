@@ -1,21 +1,21 @@
-import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import { User } from "src/app/models/user";
-import { Observable } from "rxjs";
-import { debounceTime, distinctUntilChanged, map } from "rxjs/operators";
-import { UserDetails } from "src/app/models/user-details";
-import { WorkItemDataService } from "src/app/core/services/work-item-data.service";
-import { Tag } from "src/app/models/tag";
-import { TeamService } from "src/app/core/services/team.service";
-import { AuthenticationService } from "src/app/core/services/authentication.service";
-import { Team } from "src/app/models/team";
-import { FormGroup, FormBuilder } from "@angular/forms";
-import { createUrlResolverWithoutPackagePrefix } from "@angular/compiler";
-import { WorkItem } from "src/app/models/work-item";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { User } from 'src/app/models/user';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { UserDetails } from 'src/app/models/user-details';
+import { WorkItemDataService } from 'src/app/core/services/work-item-data.service';
+import { Tag } from 'src/app/models/tag';
+import { TeamService } from 'src/app/core/services/team.service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { Team } from 'src/app/models/team';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { createUrlResolverWithoutPackagePrefix } from '@angular/compiler';
+import { WorkItem } from 'src/app/models/work-item';
 
 @Component({
-  selector: "app-search-bar",
-  templateUrl: "./search-bar.component.html",
-  styleUrls: ["./search-bar.component.css"]
+  selector: 'app-search-bar',
+  templateUrl: './search-bar.component.html',
+  styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent implements OnInit {
   @Output() updateSearchResults = new EventEmitter<WorkItem[]>();
@@ -26,10 +26,11 @@ export class SearchBarComponent implements OnInit {
   public teams: Team[];
   public teamNames: string[] = [];
   public searchForm: FormGroup;
-  chosenTag: string = "";
-  chosenStatus: string = "";
-  empty: boolean = false;
-  // public status: WorkItemStatus[];
+  public chosenTag = '';
+  public chosenStatus = '';
+  public empty = false;
+  public search: any = this.searchFunc.bind(this);
+  public teamSearch: any = this.teamSearchFunc.bind(this);
   constructor(
     private readonly workItemDataService: WorkItemDataService,
     private readonly teamService: TeamService,
@@ -39,10 +40,10 @@ export class SearchBarComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      title: [""],
-      author: [""],
-      asignee: [""],
-      team: [""]
+      title: [''],
+      author: [''],
+      asignee: [''],
+      team: ['']
     });
     this.currentUser = this.authenticationService.currentUserValue.user;
     this.workItemDataService.getUsers().subscribe((users: UserDetails[]) => {
@@ -58,60 +59,88 @@ export class SearchBarComponent implements OnInit {
       this.tags = tags;
     });
 
-    this.teamService
-      .getTeamsByUserId(this.currentUser.id)
-      .subscribe((teams: Team[]) => {
-        this.teams = teams;
-        for (const team of teams) {
-          const teamName = team.teamName;
-          this.teamNames.push(teamName);
-        }
-      });
+    this.teamService.getTeamsByUserId(this.currentUser.id).subscribe((teams: Team[]) => {
+      this.teams = teams;
+      for (const team of teams) {
+        const teamName = team.teamName;
+        this.teamNames.push(teamName);
+      }
+    });
   }
-  search = (text$: Observable<string>) =>
-    text$.pipe(
+  /**
+   * Searches through the names of all the users and excludes the name of the current user
+   */
+
+  public searchFunc(text$: Observable<string>) {
+    return text$.pipe(
       debounceTime(200),
       map(term =>
-        term === ""
+        term === ''
           ? []
-          : this.userNames
-              .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
+          : this.users
+              .filter((user: any) => {
+                return user.username.toLowerCase().indexOf(term.toLowerCase()) > -1;
+              })
               .slice(0, 10)
       )
     );
+  }
 
-  formatter = (result: string) => result;
+  /**
+   * Formats the result of the search function
+   */
+  public formatter(x: { username: string }) {
+    return x.username;
+  }
 
-  teamSearch = (text$: Observable<string>) =>
-    text$.pipe(
+  /**
+   * Searches through the names of all the teams
+   */
+  public teamSearchFunc(text$: Observable<string>) {
+    return text$.pipe(
       debounceTime(200),
       map(term =>
-        term === ""
+        term === ''
           ? []
-          : this.teamNames
-              .filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)
-              .slice(0, 10)
+          : this.teams.filter(team => team.teamName.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10)
       )
     );
+  }
 
-  formatterTeam = (result: string) => result;
+  /**
+   * Formats the results of the teamSearchFunc
+   */
+  public formatterTeam(x: { teamName: string }) {
+    return x.teamName;
+  }
 
+  /**
+   * Changes the chosen tag for the item
+   * @param tag
+   */
   public changeTag(tag: string) {
     this.chosenTag = tag;
   }
 
+  /**
+   *
+   * @param status Changes the status of the item
+   */
   public changeStatus(status: string) {
     this.chosenStatus = status;
   }
 
+  /**
+   * Searches through all the workitems acording to the selected criteria
+   */
   searchForWorkitems() {
-    const title = this.searchForm.value["title"];
-    const author = this.searchForm.value["author"];
-    const asignee = this.searchForm.value["asignee"];
-    const team = this.searchForm.value["team"];
+    const title = this.searchForm.value.title;
+    const author = this.searchForm.value.author.username;
+    const asignee = this.searchForm.value.asignee.username;
+    const team = this.searchForm.value.team.teamName;
     const tag = this.chosenTag;
     const status = this.chosenStatus;
-    let urlStr = "?";
+    let urlStr = '?';
     if (title) {
       urlStr += `title=${title}&`;
     }
@@ -131,13 +160,11 @@ export class SearchBarComponent implements OnInit {
       urlStr += `status=${status}&`;
     }
     this.empty = false;
-    this.workItemDataService
-      .getSelectedWorkItems(urlStr)
-      .subscribe((data: WorkItem[]) => {
-        if (!(data && data.length)) {
-          this.empty = true;
-        }
-        this.updateSearchResults.emit(data);
-      });
+    this.workItemDataService.getSelectedWorkItems(urlStr).subscribe((data: WorkItem[]) => {
+      if (!(data && data.length)) {
+        this.empty = true;
+      }
+      this.updateSearchResults.emit(data);
+    });
   }
 }

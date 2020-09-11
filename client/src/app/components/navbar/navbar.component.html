@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" [routerLink]="['/home']">Review42</a>
+  <a class="navbar-brand" title="review" [routerLink]="['/home']">Review42</a>
   <button
     class="navbar-toggler"
     type="button"
@@ -14,42 +14,39 @@
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" [routerLink]="['/home']"
-          >Home <span class="sr-only">(current)</span></a
-        >
+        <a class="nav-link" title="home" [routerLink]="['/home']">
+          Home
+          <span class="sr-only">(current)</span>
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/pullRequests']" *ngIf="currentUser"
-          >Work Items</a
-        >
+        <a class="nav-link" title="workitem" [routerLink]="['/pullRequests']" *ngIf="currentUser">Work Items</a>
       </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/profile']" *ngIf="currentUser">
+        <a class="nav-link" title="profile" [routerLink]="['/profile/invitations']" *ngIf="currentUser">
           <i class="fas fa-user-circle"></i>Profile
         </a>
       </li>
-      <li id="notificator-belt" class="nav-item"></li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/register']" *ngIf="!currentUser"
-          >Register</a
-        >
+      <li>
+        <a *ngIf="currentUser" class="nav-link">
+          <i class="far fa-bell" (click)="notificationToggle()"></i>
+          <span class="badge badge-notify">3</span>
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/login']" *ngIf="!currentUser"
-          >Log in</a
-        >
+        <a class="nav-link" title="register" [routerLink]="['/register']" *ngIf="!currentUser">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" title="login" [routerLink]="['/login']" *ngIf="!currentUser">Log in</a>
       </li>
       <li class="nav-item ">
-        <a
-          class="nav-link"
-          [routerLink]="['/home']"
-          (click)="logout()"
-          *ngIf="currentUser"
-          >Log out</a
-        >
+        <a class="nav-link" title="logout" [routerLink]="['/home']" (click)="logout()" *ngIf="currentUser">Log out</a>
       </li>
     </ul>
   </div>
 </nav>
+<div class="notificator" *ngIf="isShownNotification">
+  <app-notification-view></app-notification-view>
+</div>

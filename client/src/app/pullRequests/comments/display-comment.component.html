@@ -1,8 +1,11 @@
 <div class="comment container" *ngFor="let comment of comments">
-  <div class="row content">
-    {{ comment.content }}
-  </div>
-  <div class="row username">
-    <div class="float-left">{{ comment.author.username }}</div>
+  <div class="row">
+    <div class="col-2">
+      <img class="avatar" [src]="comment.author.avatarURL" alt="profile avatar" />
+    </div>
+    <div class="col-10">
+      <div class="username">{{ comment.author.username }}</div>
+      <div>{{comment.content}}</div>
+    </div>
   </div>
 </div>
